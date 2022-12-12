@@ -56,7 +56,7 @@ function save_star_part_1 () {
     sprites.destroyAllSpritesOfKind(SpriteKind.Player)
     scene.setBackgroundImage(assets.image`B`)
     animation2 = sprites.create(assets.image`e`, SpriteKind.Player)
-    animation2.setPosition(0, 0)
+    animation2.setPosition(76, 60)
     animation.runImageAnimation(
     animation2,
     assets.animation`get sploded`,
@@ -72,11 +72,20 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     mySprite.setImage(assets.image`kirby left`)
 })
 function boss_2 () {
-    for (let index = 0; index < 25; index++) {
-        projectile = sprites.createProjectileFromSide(assets.image`dna projectile`, randint(0, 160), randint(0, 120))
-        projectile.setPosition(0, randint(0, 120))
+    round = 1
+    if (round == 1) {
+        for (let index = 0; index < 10; index++) {
+            projectile = sprites.createProjectileFromSide(assets.image`dna projectile`, randint(100, 120), 0)
+            projectile.setPosition(0, randint(0, 120))
+        }
+        round += 1
     }
-    pause(5000)
+    if (round == 2) {
+        for (let index = 0; index < 10; index++) {
+            projectile = sprites.createProjectileFromSide(assets.image`dna projectile`, randint(0, 160), randint(0, 120))
+            projectile.setPosition(0, randint(0, 120))
+        }
+    }
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     mySprite.setImage(assets.image`kirby right`)
@@ -650,6 +659,7 @@ let star: Sprite = null
 let score = false
 let Activate = 0
 let projectile: Sprite = null
+let round = 0
 let savestar1 = false
 let time_chek = 0
 let animation2: Sprite = null
@@ -678,6 +688,8 @@ mySprite.setStayInScreen(true)
 myEnemy.setStayInScreen(true)
 timeCheck = false
 level = 0
+sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+boss_2()
 game.onUpdate(function () {
     if (timeCheck && Activate < game.runtime()) {
         timeCheck = false
