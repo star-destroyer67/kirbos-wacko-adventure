@@ -134,8 +134,9 @@ function end_of_boss_2 () {
     )
     time_chek = game.runtime() + 2000
     level = 3
-    level3Check = true
     scene.setBackgroundImage(assets.image`true anger`)
+    pause(2000)
+    mySprite = sprites.create(assets.image`kirby`, SpriteKind.Player)
 }
 function ran_out_of_names () {
     scene.setBackgroundImage(assets.image`kirbo home corrrupted`)
@@ -171,6 +172,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     )
 })
 function boss_3 () {
+    sprites.destroyAllSpritesOfKind(SpriteKind.Player)
     animation.runImageAnimation(
     boss3,
     assets.animation`he screm`,
@@ -195,8 +197,10 @@ function boss_3 () {
         ................................................................................
         ................................................................................
         ................................................................................
-        `, SpriteKind.Player)
+        `, SpriteKind.boss)
     boss3Mouth.setPosition(69, 37)
+    level3Check = true
+    info.startCountdown(21)
 }
 info.onScore(5, function () {
     if (info.score() > 5) {
@@ -228,9 +232,9 @@ let projectile2: Sprite = null
 let LaunchTheProjectiles = false
 let star: Sprite = null
 let score = false
+let level3Check = false
 let boss3Mouth: Sprite = null
 let Activate = 0
-let level3Check = false
 let mySprite2: Sprite = null
 let projectile: Sprite = null
 let round = 0
@@ -267,7 +271,7 @@ projectileTimeCheck = 0
 ProjectileDelay = 500
 sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
 sprites.destroyAllSpritesOfKind(SpriteKind.Player)
-ran_out_of_names()
+end_of_boss_2()
 game.onUpdate(function () {
     if (timeCheck && Activate < game.runtime()) {
         timeCheck = false
@@ -294,7 +298,14 @@ game.onUpdate(function () {
     }
 })
 game.onUpdate(function () {
-    if (time_chek < game.runtime()) {
+    if (info.countdown() < 1) {
+        if (level == 3) {
+        	
+        }
+    }
+})
+game.onUpdate(function () {
+    if (time_chek < game.runtime() && level3Check) {
         LaunchTheProjectiles = true
     }
 })
@@ -305,32 +316,34 @@ game.onUpdate(function () {
         controller.moveSprite(mySprite)
     }
 })
+game.onUpdateInterval(5000, function () {
+    if (LaunchTheProjectiles) {
+        projectile2 = sprites.createProjectileFromSprite(img`
+            . . . . . . . . . . b 5 b . . . 
+            . . . . . . . . . b 5 b . . . . 
+            . . . . . . . . . b c . . . . . 
+            . . . . . . b b b b b b . . . . 
+            . . . . . b b 5 5 5 5 5 b . . . 
+            . . . . b b 5 d 1 f 5 5 d f . . 
+            . . . . b 5 5 1 f f 5 d 4 c . . 
+            . . . . b 5 5 d f b d d 4 4 . . 
+            b d d d b b d 5 5 5 4 4 4 4 4 b 
+            b b d 5 5 5 b 5 5 4 4 4 4 4 b . 
+            b d c 5 5 5 5 d 5 5 5 5 5 b . . 
+            c d d c d 5 5 b 5 5 5 5 5 5 b . 
+            c b d d c c b 5 5 5 5 5 5 5 b . 
+            . c d d d d d d 5 5 5 5 5 d b . 
+            . . c b d d d d d 5 5 5 b b . . 
+            . . . c c c c c c c c b b . . . 
+            `, boss3Mouth, randint(10, 100), randint(10, 100))
+        projectile2.setBounceOnWall(true)
+        mySprite.setBounceOnWall(true)
+    }
+})
 forever(function () {
     if (suck) {
         myEnemy.follow(mySprite, 5)
     } else {
         myEnemy.follow(mySprite, 50)
-    }
-})
-game.onUpdateInterval(500, function () {
-    if (LaunchTheProjectiles) {
-        projectile2 = sprites.createProjectileFromSprite(img`
-            . . . . . . b b b b a a . . . . 
-            . . . . b b d d d 3 3 3 a a . . 
-            . . . b d d d 3 3 3 3 3 3 a a . 
-            . . b d d 3 3 3 3 3 3 3 3 3 a . 
-            . b 3 d 3 3 3 3 3 b 3 3 3 3 a b 
-            . b 3 3 3 3 3 a a 3 3 3 3 3 a b 
-            b 3 3 3 3 3 a a 3 3 3 3 d a 4 b 
-            b 3 3 3 3 b a 3 3 3 3 3 d a 4 b 
-            b 3 3 3 3 3 3 3 3 3 3 d a 4 4 e 
-            a 3 3 3 3 3 3 3 3 3 d a 4 4 4 e 
-            a 3 3 3 3 3 3 3 d d a 4 4 4 e . 
-            a a 3 3 3 d d d a a 4 4 4 e e . 
-            . e a a a a a a 4 4 4 4 e e . . 
-            . . e e b b 4 4 4 4 b e e . . . 
-            . . . e e e e e e e e . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, boss3Mouth, 50, 50)
     }
 })
